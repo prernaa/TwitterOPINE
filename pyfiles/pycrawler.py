@@ -1,4 +1,3 @@
-import argparse
 import twAPI as tw
 import processTwt as pt
 import pytodb as pdb
@@ -7,6 +6,7 @@ import os
 import os.path
 import codecs
 import shlex
+import sys
 
 thispath = os.path.dirname(os.path.realpath(__file__))
 
@@ -63,16 +63,25 @@ def callSearch(query, fetchnum):
     
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-s")
-    parser.add_argument("-n")
-    args = parser.parse_args()
+##    parser = argparse.ArgumentParser()
+##    parser.add_argument("-s")
+##    parser.add_argument("-n")
+##    args = parser.parse_args()
+    print "HELLO WORLD"
     fetchnum=50
+    arglst = sys.argv
 
-    if args.s != '' and args.s is not None:
-        query = args.s
-        #print "query ",query
-        if args.n != '' and args.n is not None:
-            fetchnum=int(args.n)
-        callSearch(query, fetchnum)
+    if len(arglst)==3:
+        fetchnum = int(arglst[2])
+    if len(arglst)>=2:
+        print "call search deactivated"
+        callSearch(str(arglst[1]), fetchnum)
+        
+
+##    if args.s != '' and args.s is not None:
+##        query = args.s
+##        #print "query ",query
+##        if args.n != '' and args.n is not None:
+##            fetchnum=int(args.n)
+        
         

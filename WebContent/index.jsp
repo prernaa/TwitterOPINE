@@ -256,7 +256,6 @@ function stopWaitSign(){
 }
 function crawlerRun(twtq, usrq){
 	$.post('crawlhandler.jsp', {tweetsearch: twtq, usersearch: usrq});
-	alert("posted to crawler");
 }
 /*function indexerRun(){
 	

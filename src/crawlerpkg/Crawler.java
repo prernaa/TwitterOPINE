@@ -1,9 +1,15 @@
 package crawlerpkg;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.*;
 
 import cmu.arktweetnlp.Tagger.TaggedToken;
 
 public class Crawler {
+	
+	public static String pathPyFiles = "/Users/Prerna/Desktop/Prerna/NTU/Courses-Year4-Sem2/CZ4034-InfoRet/code_app/TwitterOPINE/pyfiles/";
 	
 	public String generateQuery(List<TaggedToken> twtqtokens, String[] tags2use, String[] concepts2use, String[] withtags2use, String[] stopwords) {
 		System.out.println("Generating Query");
@@ -75,7 +81,24 @@ public class Crawler {
 	public void crawl(List<TaggedToken> twtqtokens, String[] tags2use, String[] concepts2use, String[] withtags2use, String[] stopwords, int maxnum) {
 		String querystr = generateQuery(twtqtokens, tags2use, concepts2use, withtags2use, stopwords);
 		System.out.println("API call for query");
-		
+		querystr = querystr.replace("\"","\\\""); // escaping double quotes
+		System.out.println("query string");
+		System.out.println(querystr);
+		String pythonScriptPath = pathPyFiles+"pycrawler.py";
+		System.out.println("pythonScriptPath");
+		System.out.println(pythonScriptPath);
+		try {
+			ProcessBuilder pb = new ProcessBuilder("/usr/bin/python",pythonScriptPath,querystr);
+	        pb.redirectOutput(Redirect.INHERIT);
+	        Process p = pb.start();
+	        int success = p.waitFor();
+	        System.out.println("waitFor");
+			System.out.println(success);
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Crawling Failed!");
+			e.printStackTrace();
+		}
 	}
 
 }

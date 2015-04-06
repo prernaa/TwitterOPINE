@@ -1,4 +1,5 @@
-import MySQLdb
+#import MySQLdb
+import mysql.connector
 import datetime
 
 def checkNull(variable):
@@ -45,13 +46,17 @@ def getRecordTupleWithoutSenti(tc, tname, rawlst, normlst, poslst, neglst):
     values = tuple([twitter_id, created_at.strftime('%Y-%m-%d %H:%M:%S'), tweet_raw, tweet_norm, tweet_neg, tweet_pos, source, user_id, user_name, user_screen_name, user_location, user_time_zone, user_statuses_count, user_friends_count, user_followers_count, user_desc_raw, user_desc_norm, user_desc_pos, autopolarity_lbl, autopolarity_score, autopolarity_offline, manualpolarity_poscount, manualpolarity_negcount, manualpolarity_neucount, manualpolarity_othercount, indexed, pre_crawled, pre_crawled_file_line, api_query, date_crawled.strftime('%Y-%m-%d %H:%M:%S')])
     return (columns, valuesStr, values)
 
-global db
-db = MySQLdb.connect(host="localhost", user="root", passwd="sentiment", db="TwitterSearch")
-global cur
-cur = db.cursor()
-db.autocommit(True)
+##global db
+##db = mysql.connector.connect(host="localhost", user="root", password="sentiment", database="TwitterSearch")
+##global cur
+##cur = db.cursor()
+##db.autocommit = True
 
 def dbInputWithoutSenti(tLst, fraw, fnorm, fpos, fneg, allowDBinput=True):
+    print "db input called"
+    db = mysql.connector.connect(host="localhost", user="root", password="sentiment", database="TwitterSearch")
+    cur = db.cursor()
+    db.autocommit = True
     if not allowDBinput:
         cur.close()
         db.close()
