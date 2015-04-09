@@ -68,7 +68,7 @@ if __name__ == "__main__":
 ##    parser.add_argument("-n")
 ##    args = parser.parse_args()
     print "HELLO WORLD"
-    fetchnum=50
+    fetchnum=20
     arglst = sys.argv
 
     if len(arglst)==3:

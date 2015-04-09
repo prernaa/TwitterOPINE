@@ -1,8 +1,19 @@
 package mainpkg;
+import indexerpkg.Indexer;
+import indexerpkg.MySQLAccess;
+import predictpkg.Classifier;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.common.SolrDocumentList;
+
+import querypkg.Querying;
 import cmu.arktweetnlp.*;
 import cmu.arktweetnlp.Tagger.TaggedToken;
 import crawlerpkg.*;
@@ -36,24 +47,68 @@ public class RunEngine {
 		return null;
 	}
 	
-	public static void processRawQuery(String twtq) {
+	//public static ArrayList<HashMap<String, String>> processRawQuery(String twtq) throws Exception {
+	public static String processRawQuery(String twtq) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("engine called");
 		List<TaggedToken> taggedTokens = tagQuery(twtq);
-		
+		ArrayList<HashMap<String, String>> returneddocs = new ArrayList<HashMap<String, String>>();
+		String jsondocs = "";
 		if (taggedTokens != null){
 			System.out.printf("Tagged");
-			
 			Crawler newcrawler = new Crawler();
-			System.out.println("Length of stop1");
-			System.out.println(stopwords.length);
-			newcrawler.crawl(taggedTokens, tags2use, concepts2use, withtags2use, stopwords, 50);
-			System.out.println("After Query generation");
+			ArrayList <ArrayList <String>> unibigrams = newcrawler.generateQueryForSolr(taggedTokens, tags2use, concepts2use, withtags2use, stopwords);
+			//check if already indexed by calling querying class 
+			
+	  		Querying check_query = new Querying();
+	  		int docssize = check_query.queryb4Crawling(unibigrams);
+	  		System.out.println("Docs size:"+docssize);
+			
+	  		if(docssize==0)
+	    	{
+	  			System.out.println("Length of stop1");
+	  			System.out.println(stopwords.length);
+	  			newcrawler.crawl(taggedTokens, tags2use, concepts2use, withtags2use, stopwords, 20);
+	  			System.out.println("Predicting for new data");
+	  			String pypath = newcrawler.getPythonPath();
+	  			Classifier newclassifier = new Classifier();
+	  			newclassifier.predict(pypath);
+	    	}
+	  		else{
+	  			System.out.println("Already indexed. No crawling needed....");
+	  		}
+			
+			//call indexer class from here
+			MySQLAccess s= new MySQLAccess();
+	  	  	Indexer indexSqlRecords=new Indexer();
+	  	  	ResultSet rs, rs2;
+	  		rs=s.readDataBase();
+	  		rs2=rs;
+	  		indexSqlRecords.addResultSet(rs); 	  		
+	  		s.markIndexed(rs2);
+	  		s.close();
+	  		
+	  		//Call Querying class 
+	  		Querying obj = new Querying();
+	  		//returneddocs = obj.query(twtq, "");
+	    	//System.out.println("Run Engine 1st result:"+returneddocs.get(0));
+	  		ArrayList <String> retQuery = obj.queryAfterIndexing(unibigrams);
+	  		jsondocs = retQuery.get(0);
+	  		/*String toRun = retQuery.get(1);
+	  		System.out.println(toRun);
+	  		if (toRun=="Run"){
+	  			System.out.println("Running Predict");
+	  			String pypath = newcrawler.getPythonPath();
+	  			Classifier newclassifier = new Classifier();
+	  			newclassifier.predict(pypath);
+	  		}*/
 		}
 		else{
 			//return via post that query cannot be processed
+	        
 		}
-
+		//System.out.println(jsondocs);
+		return jsondocs;
 	}
 
 }

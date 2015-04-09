@@ -1,5 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
-    pageEncoding="US-ASCII"%>
+    pageEncoding="US-ASCII" import="java.util.*"%>
+<%
+	/*boolean showResults = false;
+	ArrayList<HashMap<String, String>> returneddocs = (ArrayList<HashMap<String, String>>) request.getAttribute("results");
+	if (returneddocs == null || returneddocs.size()<=0){
+		System.out.println("no results");
+		showResults = false;
+	}
+	else{
+		System.out.println("Results are back!");
+		System.out.println(returneddocs.size());
+		showResults = true;
+		//session.setAttribute("resultsdisp",1); 
+		//session.setAttribute("results",returneddocs); 
+		//session.removeAttribute("resultsdisp"); 
+		//session.removeAttribute("results"); 
+		//response.sendRedirect("http://myexpressions.in/");
+		//System.out.println("Did it redirect?");
+		return;
+	}*/
+	%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,6 +65,18 @@
 	.qicon{
 		margin:5px;
 	}
+	.divpos{
+		border-right: 20px solid #009933;
+	}
+	.divneg{
+		border-right: 20px solid #e50000;
+	}
+	.divneu{
+		border-right: 20px solid #1dcaff;
+	}
+	.divunk{
+		border-right: 0px solid #ffffff;
+	}
 	</style>
 <title>Twitter OPINE: Twitter OPINion mining Engine</title>
 </head>
@@ -64,8 +96,8 @@
       <input type="text" placeholder="Enter Query (Required)" class="form-control" id="tweetsearch">
     </div>
     <div class="form-group">
-      <label for="user"><strong style="font-size:16px;">Filter by user description:</strong></label>
-      <input type="text" placeholder="Optional Filter for User Description" class="form-control" id="usersearch">
+      <!--  label for="user"><strong style="font-size:16px;">Filter by user description:</strong></label-->
+      <input type="hidden" placeholder="Optional Filter for User Description" class="form-control" id="usersearch">
     </div>
     <strong style="font-size:14px; color:#e50000;">*required field</strong>
     <br/><br/><button id="btnSearch" type="button" class="btn btn-primary btn-lg">Go!</button>
@@ -80,108 +112,8 @@
 	</div>
 	
 	<!-- Result Rows Start Here -->
-	<div class = "row-fluid">
-	<div style = "margin-top:10px; padding:10px;" class = "eqspan span9 offset1 centertxt whitebg darktxt">
-	<div class = "twttxt">
-	<i class="qicon fa fa-quote-left fa-lg"></i>
-	Dummy_Tweet_Text
-	<i class="qicon fa fa-quote-right fa-lg"></i>
-	<br/>
-	Posted using <em>Source</em> at <em>Time</em>.
-	</div>
-	</div>
-	<div style = "width: 8.55%; margin-left:0px; margin-top:10px; padding:10px;" class = "eqspan span1 centertxt whitebg darktxt">
-	<div class = "classdisp">
-	<i class="classpos fa fa-smile-o fa-4x"></i>
-	</div>
-	</div>
-	</div>
-	<div class = "row-fluid">
-	<div style = "margin-top:0px; padding:10px;" class = "span10 offset1 centertxt whitebg darktxt">
-	<div class = "usrtxt">
-	<hr style="margin-top:5.0px; margin-bottom:5.0px;"/>
-	<strong>By</strong> user_screen_name, <strong>Name:</strong> User_name, <strong>From:</strong> Location, <strong>Time Zone:</strong> Time_Zone<strong>.</strong><br/>
-	User_Desc
-	</div>
-	</div>
-	</div>
+	<div id = "resultsdiv">
 	
-	<div class = "row-fluid">
-	<div style = "margin-top:10px; padding:10px;" class = "eqspan span9 offset1 centertxt whitebg darktxt">
-	<div class = "twttxt">
-	<i class="qicon fa fa-quote-left fa-lg"></i>
-	Dummy_Tweet_Text
-	<i class="qicon fa fa-quote-right fa-lg"></i>
-	<br/>
-	Posted using <em>Source</em> at <em>Time</em>.
-	</div>
-	</div>
-	<div style = "width: 8.55%; margin-left:0px; margin-top:10px; padding:10px;" class = "eqspan span1 centertxt whitebg darktxt">
-	<div class = "classdisp">
-	<i class="classneg fa fa-frown-o fa-4x"></i>
-	</div>
-	</div>
-	</div>
-	<div class = "row-fluid">
-	<div style = "margin-top:0px; padding:10px;" class = "span10 offset1 centertxt whitebg darktxt">
-	<div class = "usrtxt">
-	<hr style="margin-top:5.0px; margin-bottom:5.0px;"/>
-	<strong>By</strong> user_screen_name, <strong>Name:</strong> User_name, <strong>From:</strong> Location, <strong>Time Zone:</strong> Time_Zone<strong>.</strong><br/>
-	User_Desc
-	</div>
-	</div>
-	</div>
-	
-	<div class = "row-fluid">
-	<div style = "margin-top:10px; padding:10px;" class = "eqspan span9 offset1 centertxt whitebg darktxt">
-	<div class = "twttxt">
-	<i class="qicon fa fa-quote-left fa-lg"></i>
-	Dummy_Tweet_Text
-	<i class="qicon fa fa-quote-right fa-lg"></i>
-	<br/>
-	Posted using <em>Source</em> at <em>Time</em>.
-	</div>
-	</div>
-	<div style = "width: 8.55%; margin-left:0px; margin-top:10px; padding:10px;" class = "eqspan span1 centertxt whitebg darktxt">
-	<div class = "classdisp">
-	<i class="classneu fa fa-meh-o fa-4x"></i>
-	</div>
-	</div>
-	</div>
-	<div class = "row-fluid">
-	<div style = "margin-top:0px; padding:10px;" class = "span10 offset1 centertxt whitebg darktxt">
-	<div class = "usrtxt">
-	<hr style="margin-top:5.0px; margin-bottom:5.0px;"/>
-	<strong>By</strong> user_screen_name, <strong>Name:</strong> User_name, <strong>From:</strong> Location, <strong>Time Zone:</strong> Time_Zone<strong>.</strong><br/>
-	User_Desc
-	</div>
-	</div>
-	</div>
-	
-	<div class = "row-fluid">
-	<div style = "margin-top:10px; padding:10px;" class = "eqspan span9 offset1 centertxt whitebg darktxt">
-	<div class = "twttxt">
-	<i class="qicon fa fa-quote-left fa-lg"></i>
-	Dummy_Tweet_Text
-	<i class="qicon fa fa-quote-right fa-lg"></i>
-	<br/>
-	Posted using <em>Source</em> at <em>Time</em>.
-	</div>
-	</div>
-	<div style = "width: 8.55%; margin-left:0px; margin-top:10px; padding:10px;" class = "eqspan span1 centertxt whitebg darktxt">
-	<div class = "classdisp">
-	<i class="classunk fa fa-question-circle fa-4x"></i>
-	</div>
-	</div>
-	</div>
-	<div class = "row-fluid">
-	<div style = "margin-top:0px; padding:10px;" class = "span10 offset1 centertxt whitebg darktxt">
-	<div class = "usrtxt">
-	<hr style="margin-top:5.0px; margin-bottom:5.0px;"/>
-	<strong>By</strong> user_screen_name, <strong>Name:</strong> User_name, <strong>From:</strong> Location, <strong>Time Zone:</strong> Time_Zone<strong>.</strong><br/>
-	User_Desc
-	</div>
-	</div>
 	</div>
 	
 	<!-- FOOTER -->
@@ -213,6 +145,19 @@ $(function() {
 	});
 </script>
 <script>
+
+function setDisplaySizes(){
+	var maxHeight=0;
+	$('.eqspan').each(function(){
+		if($(this).height()>maxHeight) {
+	    	maxHeight=$(this).height();
+	    }
+	});
+	$('.eqspan').height(maxHeight);
+	var parentHeight = $('.vout').height();
+	var childHeight = $('.vin').height();
+	$('.vin').css('margin-top', (parentHeight - childHeight) / 2);
+}
 function stripHTML(dirtyString) {
     var container = document.createElement('div');
     container.innerHTML = dirtyString;
@@ -254,9 +199,140 @@ function stopWaitSign(){
 	$("#waitsign").hide();
 	$("#btnSearch").show();
 }
-function crawlerRun(twtq, usrq){
-	$.post('crawlhandler.jsp', {tweetsearch: twtq, usersearch: usrq});
+
+function displayResultsInDivs(resultjson, numresults){
+	var b4_tweet_raw_pos = "<div class = \"row-fluid\"><div style = \"margin-top:10px; padding:10px;\" class = \"divpos eqspan span10 offset1 centertxt whitebg darktxt\"><div class = \"twttxt\"><i class=\"qicon fa fa-quote-left fa-lg\"></i>";
+	var b4_tweet_raw_neg = "<div class = \"row-fluid\"><div style = \"margin-top:10px; padding:10px;\" class = \"divneg eqspan span10 offset1 centertxt whitebg darktxt\"><div class = \"twttxt\"><i class=\"qicon fa fa-quote-left fa-lg\"></i>";
+	var b4_tweet_raw_neu = "<div class = \"row-fluid\"><div style = \"margin-top:10px; padding:10px;\" class = \"divneu eqspan span10 offset1 centertxt whitebg darktxt\"><div class = \"twttxt\"><i class=\"qicon fa fa-quote-left fa-lg\"></i>";
+	var b4_tweet_raw_unk = "<div class = \"row-fluid\"><div style = \"margin-top:10px; padding:10px;\" class = \"divunk eqspan span10 offset1 centertxt whitebg darktxt\"><div class = \"twttxt\"><i class=\"qicon fa fa-quote-left fa-lg\"></i>";
+
+	var b4_src_time = "<i class=\"qicon fa fa-quote-right fa-lg\"></i><br/>";
+	var end_tweet_raw = "</div></div>";
+	var b4_pol_disp = "<div style = \"width: 8.55\%; margin-left:0px; margin-top:10px; padding:10px;\" class = \"eqspan span1 centertxt whitebg darktxt\"><div class = \"classdisp\">";
+	var class_pos = "<i class=\"classpos fa fa-smile-o fa-4x\"></i>";
+	var class_neg = "<i class=\"classneg fa fa-frown-o fa-4x\"></i>";
+	var class_neu = "<i class=\"classneu fa fa-meh-o fa-4x\"></i>";
+	var class_unk = "<i class=\"classunk fa fa-question-circle fa-4x\"></i>";
+	var after_pol_disp = "</div></div></div>";
+	var b4_usr_info = "<div class = \"row-fluid\"><div style = \"margin-top:0px; padding:10px;\" class = \"span10 offset1 centertxt whitebg darktxt\"><div class = \"usrtxt\"><hr style=\"margin-top:5.0px; margin-bottom:5.0px;\"/>";
+	var after_usr_info = "</div></div></div>";
+	var getnumresults = numresults;
+	var maxnumresults = 25;
+	if (numresults>maxnumresults){
+		getnumresults = maxnumresults;
+	}
+	var div = document.getElementById('resultsdiv');
+	div.innerHTML = "<div class = \"row-fluid\"><div class = \"span10 centertxt\">"+numresults+" results found.</div></div>";
+	for (i = 0; i < getnumresults; i++) { 	
+		var extrastuff = "";
+		var pollbl = resultjson[i].autopolarity_lbl;
+		var polscore = resultjson[i].autopolarity_score;
+		if (polscore>-0.5 && polscore<0.5){
+			pollbl="neutral";
+		}
+		if (pollbl=="positive"){
+			b4_tweet_raw = b4_tweet_raw_pos;
+		}
+		else if(pollbl=="negative"){
+			b4_tweet_raw = b4_tweet_raw_neg;
+		}
+		else if(pollbl=="neutral"){
+			b4_tweet_raw = b4_tweet_raw_neu;
+		}
+		else{
+			b4_tweet_raw = b4_tweet_raw_unk;
+		}
+		extrastuff = extrastuff+b4_tweet_raw;
+		extrastuff = extrastuff+resultjson[i].tweet_raw;
+		extrastuff = extrastuff+b4_src_time;
+		
+		extrastuff = extrastuff+"Posted using <em>"+resultjson[i].source+"</em> at <em>"+resultjson[i].created_at+"</em>";
+		extrastuff = extrastuff+end_tweet_raw;
+		extrastuff = extrastuff+b4_usr_info;
+		extrastuff = extrastuff+"<strong>By</strong> "+resultjson[i].user_screen_name+", <strong>Name:</strong> "+resultjson[i].user_name+", <strong>From:</strong> "+resultjson[i].user_location+", <strong>Time Zone:</strong> "+resultjson[i].user_time_zone+"<strong>.</strong><br/>";
+		extrastuff = extrastuff+resultjson[i].user_desc_raw;
+		extrastuff = extrastuff+after_usr_info;
+		div.innerHTML = div.innerHTML+extrastuff;
+	}
+	setDisplaySizes();
 }
+
+/*function displayResultsInDivsOld(resultjson, numresults){
+	var b4_tweet_raw = "<div class = \"row-fluid\"><div style = \"margin-top:10px; padding:10px; border-right:solid #009933 20px;\" class = \"eqspan span9 offset1 centertxt whitebg darktxt\"><div class = \"twttxt\"><i class=\"qicon fa fa-quote-left fa-lg\"></i>";
+	var b4_src_time = "<i class=\"qicon fa fa-quote-right fa-lg\"></i><br/>";
+	var end_tweet_raw = "</div></div>";
+	var b4_pol_disp = "<div style = \"width: 8.55\%; margin-left:0px; margin-top:10px; padding:10px;\" class = \"eqspan span1 centertxt whitebg darktxt\"><div class = \"classdisp\">";
+	var class_pos = "<i class=\"classpos fa fa-smile-o fa-4x\"></i>";
+	var class_neg = "<i class=\"classneg fa fa-frown-o fa-4x\"></i>";
+	var class_neu = "<i class=\"classneu fa fa-meh-o fa-4x\"></i>";
+	var class_unk = "<i class=\"classunk fa fa-question-circle fa-4x\"></i>";
+	var after_pol_disp = "</div></div></div>";
+	var b4_usr_info = "<div class = \"row-fluid\"><div style = \"margin-top:0px; padding:10px;\" class = \"span10 offset1 centertxt whitebg darktxt\"><div class = \"usrtxt\"><hr style=\"margin-top:5.0px; margin-bottom:5.0px;\"/>";
+	var after_usr_info = "</div></div></div>";
+	var getnumresults = numresults;
+	var maxnumresults = 25;
+	if (numresults>maxnumresults){
+		getnumresults = maxnumresults;
+	}
+	var div = document.getElementById('resultsdiv');
+	div.innerHTML = "<div class = \"row-fluid\"><div class = \"span10 centertxt\">"+numresults+" results found.</div></div>";
+	for (i = 0; i < getnumresults; i++) { 	
+		var extrastuff = "";
+		extrastuff = extrastuff+b4_tweet_raw;
+		extrastuff = extrastuff+resultjson[i].tweet_raw;
+		extrastuff = extrastuff+b4_src_time;
+		var pollbl = resultjson[i].autopolarity_lbl;
+		var polscore = resultjson[i].autopolarity_score;
+		if (polscore>-0.5 && polscore<0.5){
+			pollbl="neutral";
+		}
+		extrastuff = extrastuff+"Posted using <em>"+resultjson[i].source+"</em> at <em>"+resultjson[i].created_at+"</em>";
+		extrastuff = extrastuff+end_tweet_raw;
+		extrastuff = extrastuff+b4_pol_disp;
+		if (pollbl=="positive"){
+			extrastuff = extrastuff+class_pos;
+		}
+		else if(pollbl=="negative"){
+			extrastuff = extrastuff+class_neg;
+		}
+		else if(pollbl=="neutral"){
+			extrastuff = extrastuff+class_neu;
+		}
+		else{
+			extrastuff = extrastuff+class_unk;
+		}
+		extrastuff = extrastuff+after_pol_disp;
+		extrastuff = extrastuff+b4_usr_info;
+		extrastuff = extrastuff+"<strong>By</strong> "+resultjson[i].user_screen_name+", <strong>Name:</strong> "+resultjson[i].user_name+", <strong>From:</strong> "+resultjson[i].user_location+", <strong>Time Zone:</strong> "+resultjson[i].user_time_zone+"<strong>.</strong><br/>";
+		extrastuff = extrastuff+resultjson[i].user_desc_raw;
+		extrastuff = extrastuff+after_usr_info;
+		div.innerHTML = div.innerHTML+extrastuff;
+	}
+	setDisplaySizes();
+}*/
+function crawlerRun(twtq, usrq){
+	/*$.post('crawlhandler.jsp', {tweetsearch: twtq, usersearch: usrq}, function(data, textStatus) {
+		//data contains the JSON object
+		//textStatus contains the status: success, error, etc
+		alert("got resp!")
+		//alert(data[0].tweet_raw);
+	}, "json");*/
+	var datatosend = {tweetsearch: twtq, usersearch: usrq}
+	$.ajax({
+	    datatype : "json",
+	    method: "post",
+	    url: "crawlhandler.jsp",
+	    data : datatosend,
+	    success : function(result) {
+	        //alert("result called!"); // result is an object which is created from the returned JSON
+	    	var strlen = result.length;
+	    	//alert(strlen);
+	    	displayResultsInDivs(result, strlen)
+	    	stopWaitSign();
+	    },
+	});
+}
+
 /*function indexerRun(){
 	
 }
@@ -278,7 +354,7 @@ $(document).ready(function() {
         	crawlerRun(twtq, usrq);
         	//indexerRun();
         	//requestobj = getResultsAsRequest();
-        	stopWaitSign();
+        	//stopWaitSign();
         	//Post request object with form
         }
     }); 
