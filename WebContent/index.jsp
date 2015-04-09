@@ -111,6 +111,19 @@
 	</div>
 	</div>
 	
+	<div class = "row-fluid">
+	<div id = "numresultsdisp" class = "span10 offset1 centertxt">
+	</div>
+	</div>
+	
+	<div class = "row-fluid">
+	<div id = "piechartdiv" class = "span5 offset1 centertxt">
+	<canvas id="sentichart" width="300" height="300"></canvas>
+	</div>
+	</div>
+	
+	
+	
 	<!-- Result Rows Start Here -->
 	<div id = "resultsdiv">
 	
@@ -128,6 +141,7 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="bootstrap/js/bootswatch.js"></script>
+<script src="Chart.js"></script>
 <script>
 $(function() {
 	   var maxHeight=0;
@@ -200,7 +214,33 @@ function stopWaitSign(){
 	$("#btnSearch").show();
 }
 
+function dispPieChart(canvasid, numpos, numneg, numneu){
+	var ctx = document.getElementById(canvasid).getContext("2d");
+	var data = [
+	            {
+	                value: numpos,
+	                color:"#009933",
+	                highlight: "#00CC33",
+	                label: "Positive"
+	            },
+	            {
+	                value: numneg,
+	                color: "#e50000",
+	                highlight: "#CC3300",
+	                label: "Negative"
+	            },
+	            {
+	                value: numneu,
+	                color: "#1dcaff",
+	                highlight: "#33FFFF",
+	                label: "Neutral/Mixed"
+	            }
+	        ];
+	var sentiPie = new Chart(ctx).Pie(data);
+}
+
 function displayResultsInDivs(resultjson, numresults){
+	dispPieChart("sentichart", 10, 10, 10);
 	var b4_tweet_raw_pos = "<div class = \"row-fluid\"><div style = \"margin-top:10px; padding:10px;\" class = \"divpos eqspan span10 offset1 centertxt whitebg darktxt\"><div class = \"twttxt\"><i class=\"qicon fa fa-quote-left fa-lg\"></i>";
 	var b4_tweet_raw_neg = "<div class = \"row-fluid\"><div style = \"margin-top:10px; padding:10px;\" class = \"divneg eqspan span10 offset1 centertxt whitebg darktxt\"><div class = \"twttxt\"><i class=\"qicon fa fa-quote-left fa-lg\"></i>";
 	var b4_tweet_raw_neu = "<div class = \"row-fluid\"><div style = \"margin-top:10px; padding:10px;\" class = \"divneu eqspan span10 offset1 centertxt whitebg darktxt\"><div class = \"twttxt\"><i class=\"qicon fa fa-quote-left fa-lg\"></i>";
@@ -221,8 +261,10 @@ function displayResultsInDivs(resultjson, numresults){
 	if (numresults>maxnumresults){
 		getnumresults = maxnumresults;
 	}
+	var divnumdisp = document.getElementById('numresultsdisp');
+	divnumdisp.innerHTML = numresults+" results found.";
 	var div = document.getElementById('resultsdiv');
-	div.innerHTML = "<div class = \"row-fluid\"><div class = \"span10 centertxt\">"+numresults+" results found.</div></div>";
+	div.innerHTML = "";
 	for (i = 0; i < getnumresults; i++) { 	
 		var extrastuff = "";
 		var pollbl = resultjson[i].autopolarity_lbl;
@@ -327,7 +369,7 @@ function crawlerRun(twtq, usrq){
 	        //alert("result called!"); // result is an object which is created from the returned JSON
 	    	var strlen = result.length;
 	    	//alert(strlen);
-	    	displayResultsInDivs(result, strlen)
+	    	displayResultsInDivs(result, strlen);
 	    	stopWaitSign();
 	    },
 	});
