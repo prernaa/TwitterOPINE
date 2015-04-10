@@ -37,6 +37,7 @@ public class Indexer
 	         * JDBC numbers the columns starting at 1, so the normal java convention
 	         * of starting at zero won't work.
 	         */
+	        
 	        for (int i = 1; i < (numColumns + 1); i++)
 	        {
 	            colNames[i] = rsm.getColumnName(i);           
@@ -46,6 +47,7 @@ public class Indexer
             //doc = new SolrInputDocument();
             System.out.println("starting add first");
             doc.addField("id", rs.getString(colNames[1]));
+            
             for(int k=2; k<numColumns+1; k++)
             {
             	doc.addField(colNames[k],rs.getString(colNames[k]));
@@ -56,11 +58,12 @@ public class Indexer
 	        
 	        System.out.println("indexing");
 	        System.out.println("calling result set");
+	       
 	        while (rs.next())
 	        {
 	            //count++;
 	        	System.out.println("new document");
-	            //doc = new SolrInputDocument();
+	            doc = new SolrInputDocument();
 	            System.out.println("starting add");
 	            doc.addField("id", rs.getString(colNames[1]));
 	            for(int k=2; k<numColumns+1; k++)

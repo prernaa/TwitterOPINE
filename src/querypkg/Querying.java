@@ -54,15 +54,16 @@ public class Querying {
     	
     	for(int i=0; i<unigrams.size();i++)
     	{
+    		String word = unigrams.get(i).replace("#", "");
     		if(i!=unigrams.size()-1)
-    			queryStr = queryStr + "tweet_norm:*"+unigrams.get(i)+"* OR ";
+    			queryStr = queryStr + "tweet_norm:*"+word+"* OR ";
     		else
-    			queryStr = queryStr + "tweet_norm:*"+unigrams.get(i)+"*) AND ";
+    			queryStr = queryStr + "tweet_norm:*"+word+"*)";
     	}
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = new Date();
+		//DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//Date date = new Date();
 		//System.out.println(dateFormat.format(date)); //2014/08/06 15:59:48
-		queryStr = queryStr + "date_crawled:*"+dateFormat.format(date).split(" ")[0]+"*";
+		//queryStr = queryStr + "date_crawled:*"+dateFormat.format(date).split(" ")[0]+"*";
     	System.out.println(queryStr);
     	solr_query.setQuery(queryStr);
     	
@@ -131,7 +132,7 @@ public class Querying {
     		
     		if(value == 1)
     		{
-    			queryStr = queryStr + "tweet_norm:*"+unigram+"*^8 OR ";
+    			queryStr = queryStr + "tweet_norm:*"+unigram+"*^10 OR ";
     		}
     		else
     		{
@@ -146,9 +147,9 @@ public class Querying {
     		int value = (int) pair.getValue();
     		String[] bigs = bigram.split(" ");
     		if(value==1)
-    			queryStr= queryStr+ "(tweet_norm:*"+bigs[0]+"* AND tweet_norm:*"+bigs[1]+"*)^10 OR ";
+    			queryStr= queryStr+ "(tweet_norm:*"+bigs[0]+"* AND tweet_norm:*"+bigs[1]+"*)^20 OR ";
     		else
-    			queryStr= queryStr+ "(tweet_norm:*"+bigs[0]+"* AND tweet_norm:*"+bigs[1]+"*)^8 OR ";
+    			queryStr= queryStr+ "(tweet_norm:*"+bigs[0]+"* AND tweet_norm:*"+bigs[1]+"*)^10 OR ";
     	}    	
     	
     	
